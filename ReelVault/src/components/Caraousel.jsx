@@ -1,63 +1,75 @@
-import { useState } from "react";
-
-const movies = [
-  { id: 1, title: "Iron Man 3", image: "https://images.pexels.com/photos/1113972/pexels-photo-1113972.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-  { id: 2, title: "Aquaman", image: "https://images.pexels.com/photos/799132/pexels-photo-799132.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-  { id: 3, title: "Avengers: Age of Ultron", image: "https://images.pexels.com/photos/355330/pexels-photo-355330.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-  { id: 4, title: "Avengers: Infinity War", image: "https://images.pexels.com/photos/104827/cinema-hall-movie-theatre-theater-104827.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-  { id: 5, title: "Avengers: Endgame", image: "https://images.pexels.com/photos/276204/pexels-photo-276204.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-  { id: 6, title: "Spider-Man: Homecoming", image: "https://images.pexels.com/photos/161852/cinema-sport-boxing-sporting-161852.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-  { id: 7, title: "Spider-Man: No Way Home", image: "https://images.pexels.com/photos/1117132/pexels-photo-1117132.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-  { id: 8, title: "X-Men: Apocalypse", image: "https://images.pexels.com/photos/426780/pexels-photo-426780.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
-];
+import { useState, useEffect } from "react";
+import { fetchMoviesWithGenres } from "./fetchMovies";
 
 export function Caraousel() {
+  const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    async function loadMovies() {
+      const trendingMovies = await fetchMoviesWithGenres();
+      setMovies(trendingMovies);
+    }
+    loadMovies();
+  }, []);
 
   const scroll = (direction) => {
     if (direction === "left") {
-      setCurrentIndex(Math.max(currentIndex - 1, 0));
+      setCurrentIndex((currentIndex - 1 + movies.length) % movies.length);
     } else {
-      setCurrentIndex(Math.min(currentIndex + 1, movies.length - 4));
+      setCurrentIndex((currentIndex + 1) % movies.length);
     }
   };
 
+  if (!movies.length) {
+    return (
+      <div className="flex items-center justify-center w-screen h-screen text-white text-lg">
+        Loading movies...
+      </div>
+    );
+  }
+
+  const currentMovie = movies[currentIndex];
+
   return (
-    <div className="relative">
-      <div className="overflow-hidden">
-        <div
-          className="flex gap-4 transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 25}%)` }}
-        >
-          {movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="flex-none w-1/4 aspect-[2/3] relative rounded-lg overflow-hidden"
-            >
-              <img
-                src={movie.image}
-                alt={movie.title}
-                className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          ))}
+    <div className="relative w-screen h-screen overflow-hidden">
+      <div className="relative w-full h-full">
+        <img
+          src={currentMovie.image}
+          alt={currentMovie.title}
+          className="object-cover w-full h-full"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-black/100" />
+
+        <div className="absolute bottom-30 left-10 text-white max-w-lg space-y-4">
+          <h1 id="movietitle" className="text-4xl font-extrabold">
+            {currentMovie.title}
+          </h1>
+          <p className="flex items-center text-md font-medium">
+            <i className="fa fa-star text-yellow-400 mr-2" aria-hidden="true"></i>{" "}
+            {currentMovie.imdbRating}
+            <span className="ml-4">{currentMovie.genre}</span>
+          </p>
+          <p className="text-md text-gray-400">{currentMovie.description}</p>
         </div>
+
+        <button className="absolute bottom-10 left-10 px-6 py-3 bg-sky-400 hover:bg-sky-600 text-white font-bold rounded-full flex items-center gap-2 cursor-pointer">
+          <i className="fa fa-play"></i> Watch Now
+        </button>
       </div>
 
       <button
         onClick={() => scroll("left")}
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full"
-        disabled={currentIndex === 0}
+        className="absolute hover:bg-sky-400 cursor-pointer left-5 top-1/2 -translate-y-1/2 bg-black/30 p-3 rounded-full text-white"
       >
-        <span className="text-white">&larr;</span>
+        &larr;
       </button>
 
       <button
         onClick={() => scroll("right")}
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full"
-        disabled={currentIndex === movies.length - 4}
+        className="absolute hover:bg-sky-400 cursor-pointer right-5 top-1/2 -translate-y-1/2 bg-black/30 p-3 rounded-full text-white"
       >
-        <span className="text-white">&rarr;</span>
+        &rarr;
       </button>
     </div>
   );
