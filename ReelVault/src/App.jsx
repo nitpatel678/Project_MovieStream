@@ -2,7 +2,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Caraousel from "./components/Caraousel";
 import Recommended from "./components/Recommended";
-import SearchResult from "./components/SearchResult";
+import SearchResults from "./components/SearchResults"; // Correctly imported
 import MoviePlay from "./components/MoviePlay";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -12,10 +12,9 @@ const App = () => {
       <NavBar />
       <div className="main-content">
         <Routes>
-          {/* Define routes for your components */}
           <Route path="/" element={<><Caraousel /><Recommended /></>} />
-          <Route path="/search" element={<SearchResult />} />
-          <Route path="/movie/:id" element={<MoviePlay />} />
+          <Route path="/search-results" element={<SearchResults />} /> {/* Corrected path */}
+          <Route path="/movieplay" element={<MoviePlay />} />
         </Routes>
       </div>
       <Footer />
