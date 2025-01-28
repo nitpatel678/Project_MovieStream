@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { fetchMoviesWithGenres } from "./fetchMovies";
+import { useNavigate } from "react-router-dom";  // If you're using React Router for navigation
 
-export default function Caraousel() {
+export default function Carousel() {
   const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();  // React Router navigate hook
 
   useEffect(() => {
     async function loadMovies() {
@@ -19,6 +21,12 @@ export default function Caraousel() {
     } else {
       setCurrentIndex((currentIndex + 1) % movies.length);
     }
+  };
+
+  const handleWatchNow = (movie) => {
+    // This function is called when the 'Watch Now' button is clicked.
+    // Use React Router to navigate to MoviePlay and pass the movie details through the state.
+    navigate("/movieplay", { state: { selectedMovie: movie } });
   };
 
   if (!movies.length) {
@@ -37,7 +45,7 @@ export default function Caraousel() {
         <img
           src={currentMovie.image}
           alt={currentMovie.title}
-          className="object-cover w-full h-full" // Ensure the image covers full width and height
+          className="object-cover w-full h-full"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/30 to-black/100" />
 
@@ -53,7 +61,10 @@ export default function Caraousel() {
           <p className="text-md text-gray-400">{currentMovie.description}</p>
         </div>
 
-        <button className="absolute bottom-10 left-10 px-6 py-3 bg-sky-400 hover:bg-sky-600 text-white font-bold rounded-full flex items-center gap-2 cursor-pointer">
+        <button
+          onClick={() => handleWatchNow(currentMovie)} // Pass current movie data on click
+          className="absolute bottom-10 left-10 px-6 py-3 bg-sky-400 hover:bg-sky-600 text-white font-bold rounded-full flex items-center gap-2 cursor-pointer"
+        >
           <i className="fa fa-play"></i> Watch Now
         </button>
       </div>
