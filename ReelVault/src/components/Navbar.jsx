@@ -4,7 +4,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 drop-shadow-[0_2px_2px_rgba(0,0,0,.5)] text-white">
+    <div className="absolute top-0 left-0 w-full z-50 drop-shadow-[0_2px_2px_rgba(0,0,0,.5)] text-white">
       <div className="flex items-center justify-between px-4 py-3">
         {/* Left Section */}
         <div className="flex items-center space-x-3 ml-5">

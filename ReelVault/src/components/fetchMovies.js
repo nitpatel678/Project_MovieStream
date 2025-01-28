@@ -1,4 +1,4 @@
-// const TMDB_API_KEY = "33d0207259c140cc9e21188e1a1a72c9";
+const TMDB_API_KEY = "33d0207259c140cc9e21188e1a1a72c9";
 
 export async function fetchMoviesWithGenres() {
   try {

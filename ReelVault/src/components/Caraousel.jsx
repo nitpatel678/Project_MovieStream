@@ -32,14 +32,14 @@ export function Caraousel() {
   const currentMovie = movies[currentIndex];
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
       <div className="relative w-full h-full">
         <img
           src={currentMovie.image}
           alt={currentMovie.title}
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full" // Ensure the image covers full width and height
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-black/100" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/30 to-black/100" />
 
         <div className="absolute bottom-30 left-10 text-white max-w-lg space-y-4">
           <h1 id="movietitle" className="text-4xl font-extrabold">
@@ -58,19 +58,21 @@ export function Caraousel() {
         </button>
       </div>
 
-      <button
-        onClick={() => scroll("left")}
-        className="absolute hover:bg-sky-400 cursor-pointer left-5 top-1/2 -translate-y-1/2 bg-black/30 p-3 rounded-full text-white"
-      >
-        &larr;
-      </button>
+      <div className="absolute bottom-10 right-10 flex gap-2">
+        <button
+          onClick={() => scroll("left")}
+          className="bg-slate-900 cursor-pointer w-10 h-10 flex items-center justify-center rounded-md hover:bg-sky-400"
+        >
+          <i className="fa fa-caret-left text-white"></i>
+        </button>
 
-      <button
-        onClick={() => scroll("right")}
-        className="absolute hover:bg-sky-400 cursor-pointer right-5 top-1/2 -translate-y-1/2 bg-black/30 p-3 rounded-full text-white"
-      >
-        &rarr;
-      </button>
+        <button
+          onClick={() => scroll("right")}
+          className="bg-slate-900 cursor-pointer w-10 h-10 flex items-center justify-center rounded-md hover:bg-sky-400"
+        >
+          <i className="fa fa-caret-right text-white"></i>
+        </button>
+      </div>
     </div>
   );
 }
