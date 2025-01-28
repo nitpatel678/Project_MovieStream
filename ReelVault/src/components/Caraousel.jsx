@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchMoviesWithGenres } from "./fetchMovies";
 
-export function Caraousel() {
+export default function Caraousel() {
   const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
